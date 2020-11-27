@@ -29,6 +29,11 @@ public class BookingAppController {
 	@Autowired
 	private UserBookingRepository repo;
 	
+	@GetMapping("/")
+	public String index() {
+		return "index";
+	}
+	
 	@GetMapping("/login")
 	public String login() {
 		return "login";
