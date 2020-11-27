@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    
+
+    <!-- stylesheet CSS -->
+    <!-- stylesheet CSS -->
+    <link th:href="@{/css/bookingStyle.css}" rel="stylesheet" />
+
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/favicon.png}"/>
+    <title>Al Muhannad</title>
+  </head>
+  <body>
+      <div class="container box">
+        <div class="px-3 pt-3">
+          <a th:href="@{'/'}"><i class="fa fa-bars"  style="font-size:48px;color:red"></i></a>
+          <h2 class="display-4 text-center" id="headertxt">Get your cleaning today</h2>
+          <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
+        </div>
+        <form action="#" th:action="@{/posting}" th:object="${booking}" method="post">
+        	<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" id="errortxt">
+				There are errors
+			</div>
+            <div class="form-group">
+              <label for="fname" id="nametxt">Full Name</label>
+              <input type="text" th:field="*{username}" id="fname" name="fname">
+				<span id="nameerror" class="error text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+            </div>
+            <div class="form-group">
+              <label for="email" id="emailtxt">Email</label>
+              <input type="email" th:field="*{email}" id="email" name="email">
+              <span class="error text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" id="emailerrortxt"></span>
+            </div>
+            
+            <div class="form-group">
+              <label for="Hours" id="mobiletxt">Mobile Number :</label>
+              <input type="text" th:field="*{contact}" id="contact" />
+            	<span id="mobileerror" class="error text-danger" th:if="${#fields.hasErrors('contact')}" th:errors="*{contact}"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="date" id="cleaningtxt">Cleaning Date:</label>
+              <input type="date" th:field="*{cleaningDate}" id="date" name="date">
+              <span class="error text-danger" th:if="${#fields.hasErrors('cleaningDate')}" th:errors="*{cleaningDate}"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="fname" id="locationtxt">Enter Location</label>
+              <input type="text" th:field="*{location}" id="location" name="location">
+              <span id="loacationerror" class="error text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="Hours" id="hourstxt">Hours :</label>
+              <input type="number" th:field="*{hours}" id="hours" min="1" max="8" value="2" step="1" data-bind="value:hours" />
+            	<span class="error text-danger" th:if="${#fields.hasErrors('hours')}" th:errors="*{hours}"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="maid" id="maidtxt">Number of Maids:</label>
+              <input type="number" th:field="*{maids}" id="maid" min="1" max="10" value="2" step="1" data-bind="value:maid" />
+              <span class="error text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+
+            <div class="form-group">
+              <p id="scheduletxt">How often do you need cleaning?<p>
+              <input  type="radio" value="daily" th:field="*{cleaningSchedule}" id="daily" name="time" checked>
+              <span class="error text-danger" th:if="${#fields.hasErrors('cleaningSchedule')}" th:errors="*{cleaningSchedule}"></span>
+              <label for="daily" id="dailytxt">Daily</label>
+              
+              <input type="radio" value="weekly" th:field="*{cleaningSchedule}" id="weekly" name="time">
+              <span class="error text-danger" th:if="${#fields.hasErrors('cleaningSchedule')}" th:errors="*{cleaningSchedule}"></span>
+              <label for="weekly" id="weeklytxt">Weekly</label>
+              
+              <input type="radio" value="monthly" th:field="*{cleaningSchedule}" id="monthly" name="time">
+              <span class="error text-danger" th:if="${#fields.hasErrors('cleaningSchedule')}" th:errors="*{cleaningSchedule}"></span>
+              <label for="monthly" id="monthytxt">Monthly</label>
+            </div>
+
+            
+            <div class="form-group">
+              <p id="descriptiontxt">Kindly provide any other cleaning instructions:</p>
+              <textarea th:field="*{description}" >Some text...</textarea>
+              <span id="descriptionerror" class="error text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            </div>
+
+            <div class="form-group">
+              <button type="button" id="button" class="btn btn-primary" data-toggle="modal" data-target="#basicExampleModal">
+                Preview pricing
+              </button>
+            </div>
+
+            <div class="form-group py-4">
+              <div  class="center-block text-center">
+                <button type="submit" class="btn btn-success btn-lg" id="submittxt">Submit</button>
+                <button type="reset" class="btn btn-danger btn-lg" id="resettxt">Reset</button>
+              </div>
+            </div>
+          </form>
+      </div>
+
+      <div id="box">
+        <p id="boxtxt">Arabic</p>
+          <label class="switch">
+            <input type="checkbox" onclick="myfun(this)" id="change">
+            <span class="slider round"></span>
+          </label>
+      </div>
+
+      <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel" placeholder="Full Name"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5 id="billingtxt">Billing Prices</h5>
+            <p id="perhourtxt">25 AED per Hour</p>
+            <p id="taxtxt">5% VAT Tax</p>
+            <blockquote class="blockquote text-right">
+              <p id="discouttxt" class="mb-0">There are Special discounts for </p>
+              <footer id="clientschedule" class="blockquote-footer">monthly clients</cite></footer>
+            </blockquote>
+            <h5 id="totalbillingtxt">Here is your total billing :</h5>
+            <label id="aedtxt">AED </label>
+            <span id="total"></span>
+            <!-- <label>1<sup>st</sup>:</label>
+                <span id="first"></span>
+                <br>
+                <label>2<sup>nd</sup>:</label>
+                <span id="second"></span> -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal" id="oktxt">ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    -->
+    <script type="text/javascript">
+    
+    var language = {
+    		arabic: {
+    			headertxt: "احصل على التنظيف اليوم",
+          nametxt: "الاسم الكامل",
+          emailtxt: "البريد الإلكتروني",
+          mobiletxt: "رقم الهاتف المحمول :",
+          cleaningtxt: "تاريخ التنظيف:",
+          locationtxt: "إدخال الدولة",
+          hourstxt: "ساعات:",
+          maidtxt: "عدد الخادمات:",
+          scheduletxt: "كم مرة تحتاج للتنظيف؟",
+          dailytxt: "اليومي",
+          weeklytxt: "أسبوعي",
+          monthytxt: "شهريا",
+          descriptiontxt: "يرجى تقديم أي تعليمات تنظيف أخرى:",
+    			button:"معاينة الأسعار",
+          submittxt:"إرسال",
+          resettxt: "إعادة تعيين",
+          billingtxt: "أسعار الفواتير",
+          perhourtxt: "25 درهم للساعة",
+          taxtxt:"5٪ ضريبة القيمة المضافة",
+          totalbillingtxt: "هذا هو إجمالي فاتورتك:",
+          aedtxt: "درهم إماراتي",
+          oktxt: "حسنا",
+          boxtxt: "عربى",
+          discouttxt: "توجد خصومات خاصة لـ",
+          clientschedule: "عملاء شهريًا",
+          errortxt:"اخطاء ادناه",
+          nameerror: "يجب أن تكون أكثر من 6 أحرف",
+          mobileerror: "يجب أن يكون رقم الهاتف أكثر من 6 أرقام",
+          loacationerror: "يجب أن يكون موقعك أكثر من 3 أحرف",
+          descriptionerror: "يجب أن يكون وصفك أكثر من 6 أحرف",
+
+
+          }
+    	}
+    	function myfun(en){
+    		if(en.checked){
+          boxtxt.style.color = "#2196F3";
+          boxtxt.textContent = language.arabic.boxtxt;
+          headertxt.textContent = language.arabic.headertxt;
+          nametxt.textContent = language.arabic.nametxt;
+          emailtxt.textContent = language.arabic.emailtxt;
+          mobiletxt.textContent = language.arabic.mobiletxt;
+          cleaningtxt.textContent = language.arabic.cleaningtxt;
+          locationtxt.textContent = language.arabic.locationtxt;
+          hourstxt.textContent = language.arabic.hourstxt;
+          maidtxt.textContent = language.arabic.maidtxt;
+          scheduletxt.textContent = language.arabic.scheduletxt;
+          dailytxt.textContent = language.arabic.dailytxt;
+          weeklytxt.textContent = language.arabic.weeklytxt;
+          monthytxt.textContent = language.arabic.monthytxt;
+          descriptiontxt.textContent = language.arabic.descriptiontxt;
+          button.textContent = language.arabic.button;
+          submittxt.textContent = language.arabic.submittxt;
+          resettxt.textContent = language.arabic.resettxt;
+          billingtxt.textContent = language.arabic.billingtxt;
+          perhourtxt.textContent = language.arabic.perhourtxt;
+          taxtxt.textContent = language.arabic.taxtxt;
+          totalbillingtxt.textContent = language.arabic.totalbillingtxt;
+          aedtxt.textContent = language.arabic.aedtxt;
+          oktxt.textContent = language.arabic.oktxt;
+          discouttxt.textContent =language.arabic.discouttxt;
+          clientschedule.textContent =language.arabic.clientschedule;
+          errortxt.textContent =language.arabic.errortxt;
+          nameerror.textContent =language.arabic.nameerror;
+          mobileerror.textContent =language.arabic.mobileerror;
+          loacationerror.textContent =language.arabic.loacationerror;
+          descriptionerror.textContent =language.arabic.descriptionerror;
+
+
+    		}else{
+    			location.reload(true);
+    		}
+    	}
+    
+    $(function() {
+        $("#button").on("click", function() {
+            var fullName = $("#fname").val();
+            var hours = $("#hours").val() * 25;
+            // var maid = $("#maid").val() * 100;
+            var vat = hours * 0.05;
+            
+            var total = hours + vat;
+            
+            $("#exampleModalLabel").text(fullName);
+            $("#total").text(total);
+           
+        });
+    });
+    
+
+    </script>
+  </body>
+</html>
